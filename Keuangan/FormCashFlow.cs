@@ -100,14 +100,14 @@ namespace Keuangan
                 foreach (var selectedData in datas)
                 {
                     string id = (string)selectedData["id"];
-                    string tag = (string)selectedData["tag"];
+                    string detail = (string)selectedData["detail"];
                     photos.Add(new List<string>
                     {
                         id,
-                        tag,
+                        detail,
                     });
 
-                    comboBox2.Items.Add($"{id} - {tag}");
+                    comboBox2.Items.Add($"{id} - {detail}");
 
                 };
                 comboBox2.SelectedIndex = 0;
@@ -171,6 +171,7 @@ namespace Keuangan
                 comboBox3.Visible = false;
                 users = null;
                 defaultUser = -1;
+                selectedUser = -1;
                 LoadRecordData(-1);
             }
             else
@@ -226,6 +227,8 @@ namespace Keuangan
                     DateTime date = dateTimePicker1.Value;
                     string dateformatted = date.ToString("yyyy-MM-dd");
 
+
+
                     Dictionary<string, string> data = new Dictionary<string, string>
                     {
                         { "actor", "me" },
@@ -233,7 +236,7 @@ namespace Keuangan
                         { "value", value.ToString() },
                         { "detail", detail },
                         { "date", $"{dateformatted}" },
-                        { "tag", users[selectedUser].Username },
+                        { "tag", defaultUser == -1 ? user.Username : users[selectedUser].Username },
                         { "sourceRecordId", "2" },
                         { "photoRecordId", comboBox2.SelectedIndex != 0 ? photos[comboBox2.SelectedIndex][0] : null},
                     };
@@ -261,8 +264,8 @@ namespace Keuangan
             if (result == DialogResult.Yes)
             {
                 ChangeProgressBarState(true);
-                try
-                {
+                /*try
+                {*/
                     string transaction = comboBox1.SelectedIndex == 0 ? "debit" : "credit";
                     float value = float.Parse(textBox3.Text);
                     string detail = textBox4.Text;
@@ -276,7 +279,7 @@ namespace Keuangan
                         { "value", value.ToString() },
                         { "detail", detail },
                         { "date", $"{dateformatted}" },
-                        { "tag", users[selectedUser].Username },
+                        { "tag", defaultUser == -1 ? user.Username : users[selectedUser].Username},
                         { "sourceRecordId", "2" },
                         { "photoRecordId", comboBox2.SelectedIndex != 0 ? photos[comboBox2.SelectedIndex][0] : null},
                     };
@@ -289,11 +292,11 @@ namespace Keuangan
 
                     MessageBox.Show(responseDataDictionary["message"].ToString());
                     LoadRecordData(selectedUser);
-                }
+                /*}
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error occurred while making the request: " + ex.Message);
-                }
+                }*/
                 ChangeProgressBarState(false);
             }
         }
@@ -409,9 +412,9 @@ namespace Keuangan
         {
             dataGridView1.Columns["id"].Visible = false;
             dataGridView1.Columns["photoRecordId"].Visible = false;
-            dataGridView1.Columns["transaction"].HeaderText = "Transaksi";
-            dataGridView1.Columns["valueRecord"].HeaderText = "Nilai";
-            dataGridView1.Columns["date"].HeaderText = "Tanggal";
+            dataGridView1.Columns["transaction"].HeaderText = "Transaction";
+            dataGridView1.Columns["valueRecord"].HeaderText = "Value";
+            dataGridView1.Columns["date"].HeaderText = "Date";
             dataGridView1.Columns["detail"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridView1.Columns["tag"].Visible = false;
         }

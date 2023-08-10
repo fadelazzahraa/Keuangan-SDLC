@@ -92,9 +92,10 @@ namespace Keuangan
                 
 
                 CultureInfo info = new CultureInfo("id-ID");
+                CultureInfo infoEn = new CultureInfo("en-US");
 
-                label11.Text = $"Pemasukan {DateTime.Now.ToString("MMMM", info)}";
-                label3.Text = $"Pengeluaran {DateTime.Now.ToString("MMMM", info)}";
+                label11.Text = $"Debit {DateTime.Now.ToString("MMMM", infoEn)}";
+                label3.Text = $"Credit {DateTime.Now.ToString("MMMM", infoEn)}";
 
                 label7.Text = balance.ToString("C", info);
                 label7.ForeColor = balance > 0 ? Color.Green : Color.Red;
@@ -238,6 +239,19 @@ namespace Keuangan
         {
             selectedUser = comboBox1.SelectedIndex;
             LoadRecordData(selectedUser);
+        }
+
+        private void pictureBox8_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormProfile formProfile = new FormProfile(user);
+            formProfile.Closed += (s, args) =>
+            {
+                this.Show();
+                comboBox1.SelectedIndex = defaultUser;
+                LoadRecordData(defaultUser);
+            };
+            formProfile.Show();
         }
     }
 }

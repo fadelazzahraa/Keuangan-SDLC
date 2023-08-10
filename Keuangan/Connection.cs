@@ -47,12 +47,14 @@ namespace Keuangan
         {
             return $"{hostURL}photos/{index}/image";
         }
-        static public string getPhotoURL = hostURL + "photos?detail=Bank Secure SDLC Photo";
+        static public string getPhotoURL = hostURL + "photos?tag=Bank Secure SDLC Photo";
         static public string getPhotoImageWithIndexURL(int index)
         {
             return $"{hostURL}photos/{index}/image";
         }
         static public string getUsersURL = hostURL + "user";
+        static public string postUserProfileURL = hostURL + "user/profile";
+        static public string changePasswordURL = hostURL + "user/password";
 
         static public async Task<string> PostAuthorizedDataAsync(string url, string requestBody, string token)
         {

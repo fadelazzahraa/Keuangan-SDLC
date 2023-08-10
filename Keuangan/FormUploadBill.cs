@@ -20,11 +20,13 @@ namespace Keuangan
     {
         private OpenFileDialog openFileDialog;
         private User user;
+        private string selectedFilePath;
 
         public FormUploadBill(User loggedinuser)
         {
             user = loggedinuser;
             InitializeComponent();
+            selectedFilePath = null;
 
             openFileDialog = new OpenFileDialog
             {
@@ -37,7 +39,7 @@ namespace Keuangan
         private async void UploadButton_Click(object sender, EventArgs e)
         {
             UploadingState(true);
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (selectedFilePath != null)
             {
                 
                 string selectedFilePath = openFileDialog.FileName;
@@ -57,9 +59,9 @@ namespace Keuangan
 
                         Dictionary<string, string> data = new Dictionary<string, string>
                         {
-                            { "detail", "Bank Prodesk Photo" },
+                            { "detail", textBox1.Text},
                             { "startDate", DateTime.Now.ToString("yyyy-MM-dd")},
-                            { "tag", textBox1.Text },
+                            { "tag", "Bank Secure SDLC Photo"},
                         };
 
                         string requestBody = System.Text.Json.JsonSerializer.Serialize(data);
@@ -87,11 +89,12 @@ namespace Keuangan
                             if (responseDataDictionary3["status"].ToString() == "True")
                             {
                                 MessageBox.Show("Upload photo bill success!");
-                            } else
+                            }
+                            else
                             {
                                 MessageBox.Show(responseDataDictionary3["message"].ToString());
                             }
-                            
+
                         }
                         else
                         {
@@ -114,12 +117,15 @@ namespace Keuangan
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string selectedFilePath = openFileDialog.FileName;
+                selectedFilePath = openFileDialog.FileName;
 
                 pictureBox.Image = Image.FromFile(selectedFilePath);
 
                 uploadButton.Enabled = true;
                 textBox1.Enabled = true;
+            } else
+            {
+                selectedFilePath = null;
             }
         }
 
@@ -154,7 +160,6 @@ namespace Keuangan
             }
         }
 
-        
     }
 }
     
